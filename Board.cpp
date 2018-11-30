@@ -8,6 +8,31 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	totalTiles = totalTiles - numMines;
 	LoadTextures();
 
+	//place1.setTexture
+	place1.setPosition(0, 16 * tileWidth);
+
+	//place2.setTexture
+	place2.setPosition(21, 16 * tileWidth);
+
+	//place3.setTexture
+	place3.setPosition(42, 16 * tileWidth);
+
+	debugButton.setTexture(imagesMap["debug"]);
+	debugButton.setPosition(16.5 * tileWidth, 16 * tileWidth);
+
+	happyButton.setTexture(imagesMap["face_happy"]);
+	happyButton.setPosition(11.5 * tileWidth, 16 * tileWidth);
+
+	winButton.setTexture(imagesMap["face_lose"]);
+	winButton.setPosition(11.5 * tileWidth, 16 * tileWidth);
+
+	test1.setTexture(imagesMap["test_1"]);
+	test1.setPosition(18.5 * tileWidth, 16 * tileWidth);
+
+	test2.setTexture(imagesMap["test_2"]);
+	test2.setPosition(20.5 * tileWidth, 16 * tileWidth);
+
+
 
 	for (int i = 0; i < width; i++)
 	{
@@ -20,6 +45,7 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 			tempTile.regularSprite.setPosition(i * 32.f, j * 32.f);
 			temptT.push_back(tempTile);
 		}
+
 
 
 		gameBoardVector.push_back(temptT);

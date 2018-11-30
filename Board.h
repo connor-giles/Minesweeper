@@ -17,6 +17,20 @@ struct Board
 	int numMines;
 	int totalTiles = height * width;
 	int numberFlagged;
+	int tileWidth = 32; //this is the pixel width of one tile
+
+	sf::Sprite place1;
+	sf::Sprite place2;
+	sf::Sprite place3;
+	sf::Sprite debugButton;
+	sf::Sprite happyButton;
+	sf::Sprite winButton;
+	sf::Sprite loseButton;
+	sf::Sprite test1;
+	sf::Sprite test2;
+
+
+
 
 
 	Mode mode; //makes a mode class object
