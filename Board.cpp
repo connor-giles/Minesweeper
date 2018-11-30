@@ -23,7 +23,10 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	happyButton.setTexture(imagesMap["face_happy"]);
 	happyButton.setPosition(11.5 * tileWidth, 16 * tileWidth);
 
-	winButton.setTexture(imagesMap["face_lose"]);
+	loseButton.setTexture(imagesMap["face_lose"]);
+	loseButton.setPosition(11.5 * tileWidth, 16 * tileWidth);
+
+	winButton.setTexture(imagesMap["face_win"]);
 	winButton.setPosition(11.5 * tileWidth, 16 * tileWidth);
 
 	test1.setTexture(imagesMap["test_1"]);
@@ -71,7 +74,17 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 		}
 	}
 
-	//Print the bottoom buttons now
+	//starts at 400 for x
+	//starts at 500 for y
+	mainWindow.draw(debugButton);
+	mainWindow.draw(test1);
+	mainWindow.draw(test2);
+
+	//This may not be in the correct order
+	mainWindow.draw(happyButton);
+	mainWindow.draw(loseButton);
+	mainWindow.draw(winButton);
+
 
 
 }
