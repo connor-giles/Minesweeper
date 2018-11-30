@@ -1,6 +1,13 @@
 #include "Board.h"
 #include "Tile.h"
 
+mt19937 random_mt(time(0));
+int Random(int min, int max)
+{
+    uniform_int_distribution<int> dist(min, max);
+    return dist(random_mt);
+}
+
 Board::Board() //populates the 2d vector used to make minesweeper board
 {
 	numMines = 50;
@@ -8,13 +15,13 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	totalTiles = totalTiles - numMines;
 	LoadTextures();
 
-	place1.setTexture(imagesMap["digit0"]);
+	place1.setTexture(imagesMap["digits0"]);
 	place1.setPosition(0.f, 16.f * tileWidth);
 
-	place2.setTexture(imagesMap["digit5"]);
+	place2.setTexture(imagesMap["digits5"]);
 	place2.setPosition(21.f, 16.f * tileWidth);
 
-	place3.setTexture(imagesMap["digit0"]);
+	place3.setTexture(imagesMap["digits0"]);
 	place3.setPosition(42.f, 16.f * tileWidth);
 
 	debugButton.setTexture(imagesMap["debug"]);
@@ -45,7 +52,7 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 			Tile tempTile;
 			tempTile.xPos = (float)i;
 			tempTile.yPos = (float)j;
-			tempTile.regularSprite.setPosition(i * 32.f, j * 32.f);
+			tempTile.hiddenTile.setPosition(i * 32.f, j * 32.f);
 			temptT.push_back(tempTile);
 		}
 
@@ -67,8 +74,8 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 	{
 		for (int j = 0; j < height; j++)
 		{
-			gameBoardVector[i][j].regularSprite.setTexture(imagesMap["tile_hidden"]);
-			mainWindow.draw(gameBoardVector[i][j].regularSprite); //draws a hidden tile at that location
+			gameBoardVector[i][j].hiddenTile.setTexture(imagesMap["tile_hidden"]);
+			mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 		}
 	}
 
@@ -81,12 +88,9 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 	mainWindow.draw(place2);
 	mainWindow.draw(place3);
 
-
-	//This may not be in the correct order
-	mainWindow.draw(winButton);
-	mainWindow.draw(loseButton);
 	mainWindow.draw(happyButton);
 
+	//need to add the set mines function somewhere
 
 
 }
@@ -155,7 +159,26 @@ void Board::LoadTextures()
 
 }
 
+void Board::SetMines() 
+{
+	for (int i = 0; i < 50; i++) //loops for total number of mines
+	{
+		int x = Random(0, 15);
+		int y = Random(0, 24);
+		
+		if (gameBoardVector[x][y].isMine) //prevents 2 mines from being placed on top of each other
+		{
+			i--;
+		}
+		else 
+		{
+			gameBoardVector[x][y].TileIsMine();
+		}
+	}
+	
 
+
+}
 
 
 

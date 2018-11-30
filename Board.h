@@ -1,5 +1,6 @@
 #pragma once
 #include "Tile.h"
+#include<random>
 #include <vector>
 //needs data structure to hold tiles
 
@@ -31,8 +32,6 @@ struct Board
 
 
 
-
-
 	Mode mode; //makes a mode class object
 	vector<vector<Tile>> gameBoardVector; // creates a 2d vector that starts in the upper left
 	vector<Tile *> tileVec; //used in LoadTextures
@@ -43,6 +42,7 @@ struct Board
 	~Board();
 	void MakeBoard(sf::RenderWindow&);
 	void LoadTextures();
+	void SetMines();
 
 	
 	
