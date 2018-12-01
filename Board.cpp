@@ -1,7 +1,7 @@
 #include "Board.h"
 #include "Tile.h"
 
-mt19937 random_mt(time(0));
+mt19937 random_mt(time(0)); //potential loss of data?
 int Random(int min, int max)
 {
     uniform_int_distribution<int> dist(min, max);
@@ -148,7 +148,7 @@ void Board::LoadTextures()
 	imagesMap.emplace("face_lose", textureVec[17]);
 	imagesMap.emplace("digits0", textureVec[18]);
 	imagesMap.emplace("digits1", textureVec[19]);
-	imagesMap.emplace("digits2", textureVec[20]);
+	imagesMap.emplace("digits2", textureVec[20]); 
 	imagesMap.emplace("digits3", textureVec[21]);
 	imagesMap.emplace("digits4", textureVec[22]);
 	imagesMap.emplace("digits5", textureVec[23]);
@@ -156,9 +156,9 @@ void Board::LoadTextures()
 	imagesMap.emplace("digits7", textureVec[25]);
 	imagesMap.emplace("digits8", textureVec[26]);
 	imagesMap.emplace("digits9", textureVec[27]);
-
+	 
 }
-
+ 
 void Board::SetMines() 
 {
 	for (int i = 0; i < 50; i++) //loops for total number of mines
