@@ -7,14 +7,12 @@ using namespace std;
 
 struct Tile
 {
-	enum class TileState 
-	{
-		Hidden, Flagged, Revealed
-	};
 
 	//===== Variables =====//
 	float xPos;
 	float yPos;
+	int numOfAdjMines;
+
 	sf::Sprite hiddenTile; 
 	sf::Sprite revealedTile; 
 	sf::Sprite flagTile; 
@@ -24,12 +22,10 @@ struct Tile
 
 
 	bool isMine; //determines if the tile is a mine
-	bool isFlag; 
+	bool isFlag; //determines if the tile is a flag
 	bool hasBeenLeftClicked; //determines if the tile has been clicked
 
 	void TileIsMine(); //sets is mine to true
-
-	TileState tileState;
 
 	//regular constructor
 	Tile();

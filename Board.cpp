@@ -13,6 +13,7 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	numMines = 50;
 	numberFlagged = 0;
 	totalTiles = totalTiles - numMines;
+	currentGameMode = Mode::Play;
 	LoadTextures();
 
 	//all this code below sets the textures for the sprites that on at the bottom of the game board, as well as their location
@@ -87,45 +88,38 @@ Board::~Board()
 
 void Board::MakeBoard(sf::RenderWindow& mainWindow)
 {
-	for (int i = 0; i < width; i++)
+	if (currentGameMode == Mode::Debug) 
 	{
-		for (int j = 0; j < height; j++)
-		{
-			if (gameBoardVector[i][j].isMine)
-			{
-				mainWindow.draw(gameBoardVector[i][j].revealedTile); //draws a hidden tile at that location
-				mainWindow.draw(gameBoardVector[i][j].mine); //draws a flag tile at that location
-			}
-
-			else if (gameBoardVector[i][j].isFlag)
-			{
-				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
-				mainWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
-			}
-
-			else if (gameBoardVector[i][j].hasBeenLeftClicked)
-			{
-				mainWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
-			}
-		
-			else
-				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
-		}
+		PlayDebugMode(mainWindow);
+	}
+	 
+	else if (currentGameMode == Mode::Test1) 
+	{
+		//do the stuff for Test1
+		//read in file
+		//cleared field of everything
+		//set adj tiles and bombs
 	}
 
+	else if (currentGameMode == Mode::Test2)
+	{
+		//do the stuff for Test2
+	}
 
-	//these draw the bottom buttons
-	mainWindow.draw(debugButton);
-	mainWindow.draw(test1);
-	mainWindow.draw(test2);
-	mainWindow.draw(place1);
-	mainWindow.draw(place2);
-	mainWindow.draw(place3);
-	mainWindow.draw(happyButton);
+	else if (currentGameMode == Mode::Win) //might not need to be here
+	{
+		//do the stuff for Win
+	}
 
+	else if (currentGameMode == Mode::Lose) //might not need to be here
+	{
+		//do the stuff for Lose
+	}
 
-	//need to add the set mines function somewhere
-
+	else //implies that the game is in Play mode
+	{
+		PlayRegularMode(mainWindow);
+	}
 
 }
 
@@ -212,6 +206,116 @@ void Board::SetMines() //this function loops through the total number of mines a
 
 }
 
+void Board::RevealMines(sf::RenderWindow& mWindow)
+{
+	//needs to loop through whole board and reveal all the mines
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (gameBoardVector[i][j].isMine)
+			{
+				cout << "Mine is supposed to be drawn" << endl;
+				mWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile below to be background for mine sprite
+				mWindow.draw(gameBoardVector[i][j].mine); //draws a mine tile at that location
+			}
+		}
+	}
+}
 
+void Board::PlayDebugMode(sf::RenderWindow& dWindow)
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (gameBoardVector[i][j].isMine)
+			{
+				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
+				dWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
+			}
+
+			else if (gameBoardVector[i][j].isFlag)
+			{
+				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+				dWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
+			}
+
+			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isMine) //checks if it was left clicked and a mine
+			{
+				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
+				dWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
+				//add ability to lose game
+				//currentGameMode = Mode::Lose;
+			}
+
+			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
+			{
+				dWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
+			}
+
+			else
+				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+		}
+	}
+
+
+	//these draw the bottom buttons
+	dWindow.draw(debugButton);
+	dWindow.draw(test1);
+	dWindow.draw(test2);
+	dWindow.draw(place1);
+	dWindow.draw(place2);
+	dWindow.draw(place3);
+	dWindow.draw(happyButton);
+}
+
+void Board::PlayRegularMode(sf::RenderWindow& rWindow)
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (gameBoardVector[i][j].isMine && !gameBoardVector[i][j].hasBeenLeftClicked)
+			{
+				rWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
+				rWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
+			}
+
+			else if (gameBoardVector[i][j].isFlag)
+			{
+				rWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+				rWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
+			}
+
+			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isMine) //checks if it was left clicked and a mine
+			{
+				//RevealMines(mainWindow); //reveals all the tiles that are mines
+				//currentGameMode = Mode::Lose;//also need to end the game
+				rWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
+				rWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
+				//currentGameMode = Mode::Lose;
+			}
+
+			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
+			{
+				rWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
+			}
+
+			else
+				rWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+		}
+	}
+
+
+	//these draw the bottom buttons
+	rWindow.draw(debugButton);
+	rWindow.draw(test1);
+	rWindow.draw(test2);
+	rWindow.draw(place1);
+	rWindow.draw(place2);
+	rWindow.draw(place3);
+	rWindow.draw(happyButton);
+}
 
 
