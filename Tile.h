@@ -30,8 +30,13 @@ struct Tile
 
 	TileState tileState;
 
+	//regular constructor
 	Tile();
+
+	//constructor that takes in all the textures as parameters
 	Tile(sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *);
+	
+	//destructor
 	~Tile();
 
 

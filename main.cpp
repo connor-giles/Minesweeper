@@ -4,8 +4,6 @@
 using namespace std;
 
 //FUNCTION PROTOTYPES
-void MakeBoard();
-
 
 
 
@@ -33,6 +31,22 @@ int main()
 					std::cout << "the left button was pressed" << std::endl;
 					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
 					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+
+					//check if click is within right positions
+					
+
+				}
+
+				if (event.mouseButton.button == sf::Mouse::Right) //only if its the right mouse click
+				{
+					cout << "the right button was pressed" << endl;
+					cout << "mouse x: " << event.mouseButton.x << endl;
+					cout << "mouse y: " << event.mouseButton.y << endl;
+
+					//boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].flagTile
+					
+
+
 				}
 			}
 

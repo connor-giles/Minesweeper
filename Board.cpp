@@ -15,6 +15,7 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	totalTiles = totalTiles - numMines;
 	LoadTextures();
 
+	//all this code below sets the textures for the sprites that on at the bottom of the game board, as well as their location
 	place1.setTexture(imagesMap["digits0"]);
 	place1.setPosition(0.f, 16.f * tileWidth);
 
@@ -49,10 +50,11 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 		vector<Tile> temptT;
 		for (int j = 0; j < height; j++)
 		{
-			Tile tempTile;
-			tempTile.xPos = (float)i;
-			tempTile.yPos = (float)j;
-			tempTile.hiddenTile.setPosition(i * 32.f, j * 32.f);
+			//this long constructor sets all of the textures of the tiles to their appropriate texture
+			Tile tempTile(imagesMap["tile_hidden"], imagesMap["tile_revealed"], imagesMap["flag"], imagesMap["mine"], imagesMap["number_1"], imagesMap["number_2"], imagesMap["number_3"], imagesMap["number_4"], imagesMap["number_5"], imagesMap["number_6"], imagesMap["number_7"], imagesMap["number_8"]);
+			tempTile.xPos = i * 32.f;
+			tempTile.yPos = j * 32.f;
+			//tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
 			temptT.push_back(tempTile);
 		}
 
@@ -79,16 +81,14 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 		}
 	}
 
-	//starts at 400 for x
-	//starts at 500 for y
 	mainWindow.draw(debugButton);
 	mainWindow.draw(test1);
 	mainWindow.draw(test2);
 	mainWindow.draw(place1);
 	mainWindow.draw(place2);
 	mainWindow.draw(place3);
-
 	mainWindow.draw(happyButton);
+
 
 	//need to add the set mines function somewhere
 
@@ -159,7 +159,7 @@ void Board::LoadTextures()
 	 
 }
  
-void Board::SetMines() 
+void Board::SetMines() //this function loops through the total number of mines and randomly assigns a mine to a certain location
 {
 	for (int i = 0; i < 50; i++) //loops for total number of mines
 	{
