@@ -1,6 +1,6 @@
 #pragma once
 #include "Tile.h"
-#include<random>
+#include <random>
 #include <vector>
 //needs data structure to hold tiles
 

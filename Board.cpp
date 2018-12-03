@@ -72,9 +72,10 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 
 		gameBoardVector.push_back(temptT);
 
-		//SetMines(); //this should add mines to the minefield
 
 	}
+
+	SetMines();
 
 }
 
@@ -90,7 +91,13 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 	{
 		for (int j = 0; j < height; j++)
 		{
-			if (gameBoardVector[i][j].isFlag)
+			if (gameBoardVector[i][j].isMine)
+			{
+				mainWindow.draw(gameBoardVector[i][j].revealedTile); //draws a hidden tile at that location
+				mainWindow.draw(gameBoardVector[i][j].mine); //draws a flag tile at that location
+			}
+
+			else if (gameBoardVector[i][j].isFlag)
 			{
 				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 				mainWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
@@ -188,22 +195,20 @@ void Board::LoadTextures()
  
 void Board::SetMines() //this function loops through the total number of mines and randomly assigns a mine to a certain location
 {
-	for (int i = 0; i < 50; i++) //loops for total number of mines
+	
+	int tempMines = numMines;
+	while (tempMines != 0)
 	{
-		int x = Random(0, 15);
-		int y = Random(0, 24);
-		
-		if (gameBoardVector[x][y].isMine) //prevents 2 mines from being placed on top of each other
-		{
-			i--;
-		}
-		else 
+		int x = Random(0, 24);
+		int y = Random(0, 15);
+
+		if (!gameBoardVector[x][y].isMine) //prevents 2 mines from being placed on top of each other
 		{
 			gameBoardVector[x][y].TileIsMine();
+			tempMines--;
 		}
-	}
-	
 
+	}
 
 }
 
