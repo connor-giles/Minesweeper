@@ -72,6 +72,8 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 
 		gameBoardVector.push_back(temptT);
 
+		//SetMines(); //this should add mines to the minefield
+
 	}
 
 }
@@ -88,22 +90,14 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 	{
 		for (int j = 0; j < height; j++)
 		{
-
 			if (gameBoardVector[i][j].isFlag)
 			{
 				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 				mainWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
 			}
 
-			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isFlag)
-			{
-				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
-				mainWindow.draw(gameBoardVector[i][j].flagTile); //draws a revealed tile at that location
-			}
-
 			else if (gameBoardVector[i][j].hasBeenLeftClicked)
 			{
-				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 				mainWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
 			}
 		

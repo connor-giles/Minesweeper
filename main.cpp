@@ -32,7 +32,7 @@ int main()
 					cout << "Left Mouse Clicked" << endl;
 
 
-					if (!boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked) //implies the tile hasnt been left clicked yet
+					if (!boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked && !boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag) //implies the tile hasnt been left clicked yet
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
 					}
@@ -52,12 +52,10 @@ int main()
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = false;
 					}
-					else //assumes the tile is not a flag
+					else if (!boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked) //assumes the tile is not a flag and hasnt already been left clicked
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = true;
-					}
-					
-
+					} 
 
 				}
 			}
