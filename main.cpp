@@ -28,22 +28,34 @@ int main()
 			{
 				if (event.mouseButton.button == sf::Mouse::Left) //only if its the left mouse click
 				{
-					std::cout << "the left button was pressed" << std::endl;
-					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
 
-					//check if click is within right positions
-					
+					cout << "Left Mouse Clicked" << endl;
+
+
+					if (!boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked) //implies the tile hasnt been left clicked yet
+					{
+						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
+					}
+					else //assumes the tile has already been clicked
+					{
+						
+					}
 
 				}
 
-				if (event.mouseButton.button == sf::Mouse::Right) //only if its the right mouse click
+				if (event.mouseButton.button == sf::Mouse::Right) //only if its the right mouse 
 				{
-					cout << "the right button was pressed" << endl;
-					cout << "mouse x: " << event.mouseButton.x << endl;
-					cout << "mouse y: " << event.mouseButton.y << endl;
 
-					//boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].flagTile
+					cout << "Right Mouse Clicked" << endl;
+
+					if (boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag) //this checks if the tile is already a flag and removes the sprite
+					{
+						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = false;
+					}
+					else //assumes the tile is not a flag
+					{
+						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = true;
+					}
 					
 
 

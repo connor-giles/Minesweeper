@@ -52,9 +52,21 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 		{
 			//this long constructor sets all of the textures of the tiles to their appropriate texture
 			Tile tempTile(imagesMap["tile_hidden"], imagesMap["tile_revealed"], imagesMap["flag"], imagesMap["mine"], imagesMap["number_1"], imagesMap["number_2"], imagesMap["number_3"], imagesMap["number_4"], imagesMap["number_5"], imagesMap["number_6"], imagesMap["number_7"], imagesMap["number_8"]);
-			tempTile.xPos = i * 32.f;
-			tempTile.yPos = j * 32.f;
-			//tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.xPos = i;
+			tempTile.yPos = j;
+			tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.revealedTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.flagTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.mine.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number1.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number2.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number3.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number4.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number5.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number6.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number7.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number8.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+
 			temptT.push_back(tempTile);
 		}
 
@@ -76,11 +88,32 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 	{
 		for (int j = 0; j < height; j++)
 		{
-			gameBoardVector[i][j].hiddenTile.setTexture(imagesMap["tile_hidden"]);
-			mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+
+			if (gameBoardVector[i][j].isFlag)
+			{
+				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+				mainWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
+			}
+
+			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isFlag)
+			{
+				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+				mainWindow.draw(gameBoardVector[i][j].flagTile); //draws a revealed tile at that location
+			}
+
+			else if (gameBoardVector[i][j].hasBeenLeftClicked)
+			{
+				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+				mainWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
+			}
+		
+			else
+				mainWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 		}
 	}
 
+
+	//these draw the bottom buttons
 	mainWindow.draw(debugButton);
 	mainWindow.draw(test1);
 	mainWindow.draw(test2);

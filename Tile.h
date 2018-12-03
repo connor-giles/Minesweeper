@@ -24,7 +24,8 @@ struct Tile
 
 
 	bool isMine; //determines if the tile is a mine
-	bool isClicked; //determines if the tile has been clicked
+	bool isFlag; 
+	bool hasBeenLeftClicked; //determines if the tile has been clicked
 
 	void TileIsMine(); //sets is mine to true
 
@@ -34,7 +35,7 @@ struct Tile
 	Tile();
 
 	//constructor that takes in all the textures as parameters
-	Tile(sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *, sf::Texture *);
+	Tile(sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &);
 	
 	//destructor
 	~Tile();

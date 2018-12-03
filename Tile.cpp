@@ -11,12 +11,19 @@
 Tile::Tile() 
 {
 	isMine = false;
+	isFlag = false;
+	hasBeenLeftClicked = false;
 	tileState = TileState::Hidden;
 	//adjMine;
 }
 
 Tile::Tile(sf::Texture &hiddenText, sf::Texture &revealedText, sf::Texture &flagText, sf::Texture &mineText, sf::Texture &num1, sf::Texture &num2, sf::Texture &num3, sf::Texture &num4, sf::Texture &num5, sf::Texture &num6, sf::Texture &num7, sf::Texture &num8) 
 {
+
+	isMine = false;
+	isFlag = false;
+	hasBeenLeftClicked = false;
+
 	hiddenTile.setTexture(hiddenText);
 	revealedTile.setTexture(revealedText);
 	flagTile.setTexture(flagText);
