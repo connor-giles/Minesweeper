@@ -290,9 +290,12 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isMine) //checks if it was left clicked and a mine
 			{
+
+				//NEED TO SEE IF THIS IS SUPPOSED TO BE HIDDEN OR REVEALED TILE
+
 				//RevealMines(mainWindow); //reveals all the tiles that are mines
 				//currentGameMode = Mode::Lose;//also need to end the game
-				rWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
+				rWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
 				rWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
 				//currentGameMode = Mode::Lose;
 			}
@@ -317,5 +320,48 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 	rWindow.draw(place3);
 	rWindow.draw(happyButton);
 }
+
+void Board::ResetBoard() 
+{
+	numberFlagged = 0;
+	numMines = 50;
+
+	gameBoardVector.clear(); //completely removes old game
+	
+	for (int i = 0; i < width; i++)
+	{
+		currentGameMode = Mode::Play; //might not need to be here
+
+		vector<Tile> temptT;
+		for (int j = 0; j < height; j++)
+		{
+			//this long constructor sets all of the textures of the tiles to their appropriate texture
+			Tile tempTile(imagesMap["tile_hidden"], imagesMap["tile_revealed"], imagesMap["flag"], imagesMap["mine"], imagesMap["number_1"], imagesMap["number_2"], imagesMap["number_3"], imagesMap["number_4"], imagesMap["number_5"], imagesMap["number_6"], imagesMap["number_7"], imagesMap["number_8"]);
+			tempTile.xPos = i;
+			tempTile.yPos = j;
+			tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.revealedTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.flagTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.mine.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number1.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number2.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number3.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number4.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number5.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number6.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number7.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number8.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+
+			temptT.push_back(tempTile);
+		}
+
+		gameBoardVector.push_back(temptT);
+
+	}
+
+	SetMines();
+
+}
+
 
 

@@ -34,8 +34,22 @@ int main()
 					cout << event.mouseButton.x << endl;
 					cout << event.mouseButton.y << endl;
 
+					
+					if ((event.mouseButton.x >= (11.5f * boardObj.tileWidth) && (event.mouseButton.x <= (11.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the reset face button area and not in debug mode
+					{
+						cout << "Reset button clicked" << endl;
+						boardObj.ResetBoard();
+					}
 
-					if ((event.mouseButton.x >= (16.5f * boardObj.tileWidth) && (event.mouseButton.x <= (16.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the debug button area and not already in debug mode
+					else if ((event.mouseButton.x >= (11.5f * boardObj.tileWidth) && (event.mouseButton.x <= (11.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode == Board::Mode::Debug) //checks if its within the reset face button area and in debug mode
+					{
+						cout << "Reset button clicked" << endl;
+						boardObj.ResetBoard();
+						boardObj.currentGameMode = Board::Mode::Debug; //keeps the game in debug mode
+					}
+					
+
+					else if ((event.mouseButton.x >= (16.5f * boardObj.tileWidth) && (event.mouseButton.x <= (16.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the debug button area and not already in debug mode
 					{
 						cout << "Debug button clicked" << endl;
 						boardObj.currentGameMode = Board::Mode::Debug;
@@ -63,6 +77,7 @@ int main()
 
 					cout << "Right Mouse Clicked" << endl;
 					//need to add a fix for clicking outside of the board with a right click
+					//need to be able to right click a mine and have a flag appear
 
 
 					if (boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag) //this checks if the tile is already a flag and removes the sprite

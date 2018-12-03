@@ -47,6 +47,7 @@ struct Board
 	void RevealMines(sf::RenderWindow&);
 	void PlayDebugMode(sf::RenderWindow&);
 	void PlayRegularMode(sf::RenderWindow&);
+	void ResetBoard();
 
 	
 	
