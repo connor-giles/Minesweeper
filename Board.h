@@ -52,6 +52,8 @@ struct Board
 	void ResetBoard();
 	void CalculateAdjacentTiles();
 	void SetMiddleAdjTiles(int, int);
-	
+	void LoadTest1();
+	void LoadTest2();
+		
 };
 

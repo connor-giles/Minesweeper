@@ -97,137 +97,14 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 	 
 	else if (currentGameMode == Mode::Test1) 
 	{
-		//do the stuff for Test1
-		gameBoardVector.clear();
-
-		for (int i = 0; i < width; i++)
-		{
-			vector<Tile> temptT;
-			for (int j = 0; j < height; j++)
-			{
-				//this long constructor sets all of the textures of the tiles to their appropriate texture
-				Tile tempTile(imagesMap["tile_hidden"], imagesMap["tile_revealed"], imagesMap["flag"], imagesMap["mine"], imagesMap["number_1"], imagesMap["number_2"], imagesMap["number_3"], imagesMap["number_4"], imagesMap["number_5"], imagesMap["number_6"], imagesMap["number_7"], imagesMap["number_8"]);
-				tempTile.xPos = i;
-				tempTile.yPos = j;
-				tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.revealedTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.flagTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.mine.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number1.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number2.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number3.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number4.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number5.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number6.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number7.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number8.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-
-				temptT.push_back(tempTile);
-			}
-
-			gameBoardVector.push_back(temptT);
-
-		}
-
-
-		ifstream iFile("boards\\testboard.brd");
-		string lineFromFile;
-
-		if (iFile.is_open())
-		{
-			int j = 0;
-			while (getline(iFile, lineFromFile))
-			{
-				for (int i = 0; i < lineFromFile.length(); i++)
-				{
-					if (lineFromFile[i] == '1')
-					{
-						gameBoardVector[i][j].TileIsMine();
-					}
-					else
-					{
-						gameBoardVector[i][j].isMine == false;
-					}
-				}
-				j++;
-			}
-		}
-
-		iFile.close();
-
-		CalculateAdjacentTiles(); //should calculate the tiles surrounding
-		
-		currentGameMode = Mode::Play;
-		
-		//set adj tiles and bombs
+		LoadTest1();
+		//STILL NEED THE STUFF FOR SET ADJACENT NUMBER OF MINES
 	}
 
 	else if (currentGameMode == Mode::Test2)
 	{
-		//do the stuff for Test2
-		//do the stuff for Test1
-		gameBoardVector.clear();
-
-		for (int i = 0; i < width; i++)
-		{
-			vector<Tile> temptT;
-			for (int j = 0; j < height; j++)
-			{
-				//this long constructor sets all of the textures of the tiles to their appropriate texture
-				Tile tempTile(imagesMap["tile_hidden"], imagesMap["tile_revealed"], imagesMap["flag"], imagesMap["mine"], imagesMap["number_1"], imagesMap["number_2"], imagesMap["number_3"], imagesMap["number_4"], imagesMap["number_5"], imagesMap["number_6"], imagesMap["number_7"], imagesMap["number_8"]);
-				tempTile.xPos = i;
-				tempTile.yPos = j;
-				tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.revealedTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.flagTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.mine.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number1.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number2.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number3.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number4.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number5.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number6.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number7.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-				tempTile.number8.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
-
-				temptT.push_back(tempTile);
-			}
-
-			gameBoardVector.push_back(temptT);
-
-		}
-
-
-		ifstream iFile("boards\\testboard2.brd");
-		string lineFromFile;
-
-		if (iFile.is_open())
-		{
-			int j = 0;
-			while (getline(iFile, lineFromFile))
-			{
-				for (int i = 0; i < lineFromFile.length(); i++)
-				{
-					if (lineFromFile[i] == '1')
-					{
-						gameBoardVector[i][j].TileIsMine();
-					}
-					else
-					{
-						gameBoardVector[i][j].isMine == false;
-					}
-				}
-				j++;
-			}
-		}
-
-		iFile.close();
-
-		CalculateAdjacentTiles(); //should calculate the tiles surrounding
-
-		currentGameMode = Mode::Play;
-
-		//set adj tiles and bombs
+		LoadTest2();
+		//STILL NEED THE STUFF FOR SET ADJACENT NUMBER OF MINES
 	}
 
 	else if (currentGameMode == Mode::Win) //might not need to be here
@@ -665,7 +542,7 @@ void Board::CalculateAdjacentTiles()
 		}//end inner for loop
 	}//end outer for loop
 }//end function
-
+//STILL NEED THE STUFF FOR SET ADJACENT NUMBER OF MINES
 void Board::SetMiddleAdjTiles(int i, int j) //this sets the adjacent tile if its in the middle 
 {
 	Tile* temp1;
@@ -699,5 +576,137 @@ void Board::SetMiddleAdjTiles(int i, int j) //this sets the adjacent tile if its
 
 }
 
+void Board::LoadTest1() 
+{
+	//do the stuff for Test1
+	gameBoardVector.clear();
+
+	for (int i = 0; i < width; i++)
+	{
+		vector<Tile> temptT;
+		for (int j = 0; j < height; j++)
+		{
+			//this long constructor sets all of the textures of the tiles to their appropriate texture
+			Tile tempTile(imagesMap["tile_hidden"], imagesMap["tile_revealed"], imagesMap["flag"], imagesMap["mine"], imagesMap["number_1"], imagesMap["number_2"], imagesMap["number_3"], imagesMap["number_4"], imagesMap["number_5"], imagesMap["number_6"], imagesMap["number_7"], imagesMap["number_8"]);
+			tempTile.xPos = i;
+			tempTile.yPos = j;
+			tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.revealedTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.flagTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.mine.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number1.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number2.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number3.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number4.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number5.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number6.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number7.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number8.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+
+			temptT.push_back(tempTile);
+		}
+
+		gameBoardVector.push_back(temptT);
+
+	}
+
+
+	ifstream iFile("boards\\testboard.brd");
+	string lineFromFile;
+
+	if (iFile.is_open())
+	{
+		int j = 0;
+		while (getline(iFile, lineFromFile))
+		{
+			for (int i = 0; i < lineFromFile.length(); i++)
+			{
+				if (lineFromFile[i] == '1')
+				{
+					gameBoardVector[i][j].TileIsMine();
+				}
+				else
+				{
+					gameBoardVector[i][j].isMine == false;
+				}
+			}
+			j++;
+		}
+	}
+
+	iFile.close();
+
+	CalculateAdjacentTiles(); //should calculate the tiles surrounding
+
+	currentGameMode = Mode::Play;
+
+	//set adj tiles and bombs
+}
+void Board::LoadTest2()
+{
+	//do the stuff for Test2
+	gameBoardVector.clear();
+
+	for (int i = 0; i < width; i++)
+	{
+		vector<Tile> temptT;
+		for (int j = 0; j < height; j++)
+		{
+			//this long constructor sets all of the textures of the tiles to their appropriate texture
+			Tile tempTile(imagesMap["tile_hidden"], imagesMap["tile_revealed"], imagesMap["flag"], imagesMap["mine"], imagesMap["number_1"], imagesMap["number_2"], imagesMap["number_3"], imagesMap["number_4"], imagesMap["number_5"], imagesMap["number_6"], imagesMap["number_7"], imagesMap["number_8"]);
+			tempTile.xPos = i;
+			tempTile.yPos = j;
+			tempTile.hiddenTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.revealedTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.flagTile.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.mine.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number1.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number2.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number3.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number4.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number5.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number6.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number7.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+			tempTile.number8.setPosition(tempTile.xPos * 32.f, tempTile.yPos * 32.f); //sets the location of that tile
+
+			temptT.push_back(tempTile);
+		}
+
+		gameBoardVector.push_back(temptT);
+
+	}
+
+
+	ifstream iFile("boards\\testboard2.brd");
+	string lineFromFile;
+
+	if (iFile.is_open())
+	{
+		int j = 0;
+		while (getline(iFile, lineFromFile))
+		{
+			for (int i = 0; i < lineFromFile.length(); i++)
+			{
+				if (lineFromFile[i] == '1')
+				{
+					gameBoardVector[i][j].TileIsMine();
+				}
+				else
+				{
+					gameBoardVector[i][j].isMine == false;
+				}
+			}
+			j++;
+		}
+	}
+
+	iFile.close();
+
+	CalculateAdjacentTiles(); //should calculate the tiles surrounding
+
+	currentGameMode = Mode::Play;
+
+	//set adj tiles and bombs
+}
 
 
