@@ -50,12 +50,8 @@ struct Board
 	void PlayDebugMode(sf::RenderWindow&);
 	void PlayRegularMode(sf::RenderWindow&);
 	void ResetBoard();
-	void AdjacentTiles();
+	void CalculateAdjacentTiles();
 	void SetMiddleAdjTiles(int, int);
-	void LoadTest1();
-	void LoadTest2();
 	
-	
-
 };
 

@@ -67,21 +67,27 @@ int main()
 					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug)
 					{
 						cout << "Test 1 mode turned on in regular mode" << endl;
+						boardObj.currentGameMode = Board::Mode::Test1;
 					}
 
 					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug)
 					{
 						cout << "Test 1 mode turned on in debug mode" << endl;
+						boardObj.currentGameMode = Board::Mode::Test1;
+						//maybe go back into debug mode?
 					}
 
 					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug)
 					{
 						cout << "Test 2 mode turned on in regular mode" << endl;
+						boardObj.currentGameMode = Board::Mode::Test2;
 					}
 
 					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug)
 					{
 						cout << "Test 2 mode turned on in debug mode" << endl;
+						boardObj.currentGameMode = Board::Mode::Test2;
+						//maybe go back into debug mode?
 					}
 
 					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag) //implies the tile hasnt been left clicked yet
