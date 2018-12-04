@@ -4,7 +4,11 @@
 using namespace std;
 
 //FUNCTION PROTOTYPES
-
+bool ResetButtonClicked(sf::Event, Board);
+bool DebugButtonClicked(sf::Event, Board);
+bool Test1Clicked(sf::Event, Board);
+bool Test2Clicked(sf::Event, Board);
+Tile SelectedTile(sf::Event, Board);
 
 
 int main()
@@ -35,33 +39,52 @@ int main()
 					cout << event.mouseButton.y << endl;
 
 					
-					if ((event.mouseButton.x >= (11.5f * boardObj.tileWidth) && (event.mouseButton.x <= (11.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the reset face button area and not in debug mode
+					if (ResetButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the reset face button area and not in debug mode
 					{
-						cout << "Reset button clicked" << endl;
+						cout << "Reset button clicked in regular mode" << endl;
 						boardObj.ResetBoard();
 					}
 
-					else if ((event.mouseButton.x >= (11.5f * boardObj.tileWidth) && (event.mouseButton.x <= (11.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode == Board::Mode::Debug) //checks if its within the reset face button area and in debug mode
+					else if (ResetButtonClicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug) //checks if its within the reset face button area and in debug mode
 					{
-						cout << "Reset button clicked" << endl;
+						cout << "Reset button clicked in debug mode" << endl;
 						boardObj.ResetBoard();
 						boardObj.currentGameMode = Board::Mode::Debug; //keeps the game in debug mode
 					}
-					
 
-					else if ((event.mouseButton.x >= (16.5f * boardObj.tileWidth) && (event.mouseButton.x <= (16.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the debug button area and not already in debug mode
+					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the debug button area and not already in debug mode
 					{
-						cout << "Debug button clicked" << endl;
+						cout << "Debug mode turned on" << endl;
 						boardObj.currentGameMode = Board::Mode::Debug;
 					}
 
-					else if ((event.mouseButton.x >= (16.5f * boardObj.tileWidth) && (event.mouseButton.x <= (16.5f * boardObj.tileWidth) + 64)) && (event.mouseButton.y >= 16.f * boardObj.tileWidth && (event.mouseButton.y <= (16.f * boardObj.tileWidth) + 64)) && boardObj.currentGameMode == Board::Mode::Debug) 
+					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug) 
 					{
-						//need to turn debug mode off
+						cout << "Debug mode turned off" << endl;
 						boardObj.currentGameMode = Board::Mode::Play;
 					}
 
-					else if (!boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked && !boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag) //implies the tile hasnt been left clicked yet
+					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug)
+					{
+						cout << "Test 1 mode turned on in regular mode" << endl;
+					}
+
+					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug)
+					{
+						cout << "Test 1 mode turned on in debug mode" << endl;
+					}
+
+					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug)
+					{
+						cout << "Test 2 mode turned on in regular mode" << endl;
+					}
+
+					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug)
+					{
+						cout << "Test 2 mode turned on in debug mode" << endl;
+					}
+
+					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag) //implies the tile hasnt been left clicked yet
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
 					}
@@ -80,7 +103,7 @@ int main()
 					//need to be able to right click a mine and have a flag appear
 
 
-					if (boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag) //this checks if the tile is already a flag and removes the sprite
+					if (SelectedTile(event, boardObj).isFlag) //this checks if the tile is already a flag and removes the sprite
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = false;
 					}
@@ -106,4 +129,54 @@ int main()
 	}
 
 	return 0;
+}
+
+bool ResetButtonClicked(sf::Event e, Board bObj) 
+{
+	if ((e.mouseButton.x >= (11.5f * bObj.tileWidth) && (e.mouseButton.x <= (11.5f * bObj.tileWidth) + 64)) && (e.mouseButton.y >= 16.f * bObj.tileWidth && (e.mouseButton.y <= (16.f * bObj.tileWidth) + 64)) == true)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+bool DebugButtonClicked(sf::Event e, Board bObj)
+{
+	
+	if ((e.mouseButton.x >= (16.5f * bObj.tileWidth) && (e.mouseButton.x <= (16.5f * bObj.tileWidth) + 64)) && (e.mouseButton.y >= 16.f * bObj.tileWidth && (e.mouseButton.y <= (16.f * bObj.tileWidth) + 64)) == true)
+	{
+		return true;
+	}
+	else
+		return false;
+
+}
+
+bool Test1Clicked(sf::Event e, Board bObj) 
+{
+	if ((e.mouseButton.x >= (18.5f * bObj.tileWidth) && (e.mouseButton.x <= (18.5f * bObj.tileWidth) + 64)) && (e.mouseButton.y >= 16.f * bObj.tileWidth && (e.mouseButton.y <= (16.f * bObj.tileWidth) + 64)) == true)
+	{
+		return true;
+	}
+	else
+		return false;
+
+}
+
+bool Test2Clicked(sf::Event e, Board bObj)
+{
+	if ((e.mouseButton.x >= (20.5f * bObj.tileWidth) && (e.mouseButton.x <= (20.5f * bObj.tileWidth) + 64)) && (e.mouseButton.y >= 16.f * bObj.tileWidth && (e.mouseButton.y <= (16.f * bObj.tileWidth) + 64)) == true)
+	{
+		return true;
+	}
+	else
+		return false;
+
+}
+
+
+Tile SelectedTile(sf::Event e, Board bObj) 
+{
+	return bObj.gameBoardVector[e.mouseButton.x / 32][e.mouseButton.y / 32];
 }

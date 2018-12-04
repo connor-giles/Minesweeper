@@ -20,6 +20,8 @@ struct Board
 	int numberFlagged;
 	int tileWidth = 32; //this is the pixel width of one tile
 
+	bool gameIsPlayable;
+
 
 	sf::Sprite place1;
 	sf::Sprite place2;
@@ -48,7 +50,10 @@ struct Board
 	void PlayDebugMode(sf::RenderWindow&);
 	void PlayRegularMode(sf::RenderWindow&);
 	void ResetBoard();
-
+	void AdjacentTiles();
+	void SetMiddleAdjTiles(int, int);
+	void LoadTest1();
+	void LoadTest2();
 	
 	
 

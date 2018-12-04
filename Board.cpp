@@ -14,6 +14,7 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	numberFlagged = 0;
 	totalTiles = totalTiles - numMines;
 	currentGameMode = Mode::Play;
+	gameIsPlayable = true;
 	LoadTextures();
 
 	//all this code below sets the textures for the sprites that on at the bottom of the game board, as well as their location
@@ -76,6 +77,7 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 
 	}
 
+	AdjacentTiles(); //should calculate the tiles surroundin
 	SetMines();
 
 }
@@ -114,6 +116,8 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 	else if (currentGameMode == Mode::Lose) //might not need to be here
 	{
 		//do the stuff for Lose
+		
+		
 	}
 
 	else //implies that the game is in Play mode
@@ -216,7 +220,7 @@ void Board::RevealMines(sf::RenderWindow& mWindow)
 			if (gameBoardVector[i][j].isMine)
 			{
 				cout << "Mine is supposed to be drawn" << endl;
-				mWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile below to be background for mine sprite
+				mWindow.draw(gameBoardVector[i][j].revealedTile); //draws a hidden tile below to be background for mine sprite
 				mWindow.draw(gameBoardVector[i][j].mine); //draws a mine tile at that location
 			}
 		}
@@ -243,9 +247,15 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isMine) //checks if it was left clicked and a mine
 			{
-				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
+				dWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
 				dWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
+				gameIsPlayable = false;
+
+				//NEED TO REVEAL ALL MINES
+
+				//RevealMines(dWindow);
 				//add ability to lose game
+				
 				//currentGameMode = Mode::Lose;
 			}
 
@@ -290,13 +300,14 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isMine) //checks if it was left clicked and a mine
 			{
-
-				//NEED TO SEE IF THIS IS SUPPOSED TO BE HIDDEN OR REVEALED TILE
-
-				//RevealMines(mainWindow); //reveals all the tiles that are mines
-				//currentGameMode = Mode::Lose;//also need to end the game
 				rWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
 				rWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
+				gameIsPlayable = false;
+				
+				//NEED TO REVEAL ALL MINES
+
+				//RevealMines(rWindow);
+
 				//currentGameMode = Mode::Lose;
 			}
 
@@ -325,6 +336,7 @@ void Board::ResetBoard()
 {
 	numberFlagged = 0;
 	numMines = 50;
+	gameIsPlayable = true;
 
 	gameBoardVector.clear(); //completely removes old game
 	
@@ -359,9 +371,219 @@ void Board::ResetBoard()
 
 	}
 
+	AdjacentTiles(); //should calculate the tiles surrounding
 	SetMines();
 
 }
 
 
+void Board::AdjacentTiles()
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (!gameBoardVector[i][j].isMine && (i != 0) && (j != 0) && (i != width - 1) && (j != height - 1))
+			{
+				SetMiddleAdjTiles(i, j);
+			}
+
+			//UPPER LEFT CORNER
+			if (i == 0 && j == 0) 
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+
+				temp1 = &gameBoardVector[i +1][j];		 //E
+				temp2 = &gameBoardVector[i + 1][j + 1];	 //SE
+				temp3 = &gameBoardVector[i][j + 1];		 //S
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+			}
+
+			//UPPER RIGHT CORNER
+			if (i == (width - 1) && j == 0) 
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+
+				temp1 = &gameBoardVector[i - 1][j];		 //W
+				temp2 = &gameBoardVector[i - 1][j + 1];	 //SW
+				temp3 = &gameBoardVector[i][j + 1];		 //S
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+			}
+
+			//LOWER LEFT CORNER
+			if (i == 0 && j == (height - 1)) 
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+
+				temp1 = &gameBoardVector[i][j - 1];		 //N
+				temp2 = &gameBoardVector[i + 1][j - 1];	 //NE
+				temp3 = &gameBoardVector[i + 1][j];		 //E
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+			}
+
+			//LOWER RIGHT CORNER
+			if (i == (width - 1) && j == (height - 1)) 
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+
+				temp1 = &gameBoardVector[i - 1][j];		 //W
+				temp2 = &gameBoardVector[i - 1][j - 1];	 //NW
+				temp3 = &gameBoardVector[i][j - 1];		 //N
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+			}
+
+			//LEFT EDGE TILE
+			if (i == 0 && j > 0 && j != (height - 1)) 
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+				Tile* temp4;
+				Tile* temp5;
+
+				temp1 = &gameBoardVector[i][j - 1];		 //N
+				temp2 = &gameBoardVector[i + 1][j - 1];  //NE
+				temp3 = &gameBoardVector[i + 1][j];      //E
+				temp4 = &gameBoardVector[i + 1][j + 1];  //SE
+				temp5 = &gameBoardVector[i][j + 1];      //S
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+			}
+
+			//TOP EDGE TILE
+			if (i > 0 && i != (width - 1) && j == 0)
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+				Tile* temp4;
+				Tile* temp5;
+
+				temp1 = &gameBoardVector[i - 1][j];      //W
+				temp2 = &gameBoardVector[i - 1][j + 1];  //SW
+				temp3 = &gameBoardVector[i][j + 1];      //S
+				temp4 = &gameBoardVector[i + 1][j + 1];  //SE
+				temp5 = &gameBoardVector[i + 1][j];      //E
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+			}
+
+			//RIGHT EDGE TILE
+			if (i == (width - 1) && j > 0 && j != (height - 1))
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+				Tile* temp4;
+				Tile* temp5;
+
+				temp1 = &gameBoardVector[i][j - 1];		 //N
+				temp2 = &gameBoardVector[i - 1][j - 1];  //NW
+				temp3 = &gameBoardVector[i - 1][j];      //W
+				temp4 = &gameBoardVector[i - 1][j + 1];  //SW
+				temp5 = &gameBoardVector[i][j + 1];      //S
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+			}
+
+			//BOTTOM EDGE TILE
+			if (i > 0 && i != (width - 1) && j == (height - 1))
+			{
+				Tile* temp1;
+				Tile* temp2;
+				Tile* temp3;
+				Tile* temp4;
+				Tile* temp5;
+
+				temp1 = &gameBoardVector[i - 1][j];      //W
+				temp2 = &gameBoardVector[i - 1][j - 1];  //NW
+				temp3 = &gameBoardVector[i][j - 1];		 //N
+				temp4 = &gameBoardVector[i + 1][j - 1];  //NE
+				temp5 = &gameBoardVector[i + 1][j];      //E
+
+				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
+				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+			}
+
+		}//end inner for loop
+	}//end outer for loop
+}//end function
+
+void Board::SetMiddleAdjTiles(int i, int j) //this sets the adjacent tile if its in the middle 
+{
+	Tile* temp1;
+	Tile* temp2;
+	Tile* temp3;
+	Tile* temp4;
+	Tile* temp5;
+	Tile* temp6;
+	Tile* temp7;
+	Tile* temp8;
+
+	temp1 = &gameBoardVector[i - 1][j - 1];  //NW
+	temp2 = &gameBoardVector[i][j - 1];		 //N
+	temp3 = &gameBoardVector[i + 1][j - 1];  //NE
+	temp4 = &gameBoardVector[i - 1][j];      //W
+	temp5 = &gameBoardVector[i + 1][j];      //E
+	temp6 = &gameBoardVector[i - 1][j + 1];  //SW
+	temp7 = &gameBoardVector[i][j + 1];      //S
+	temp8 = &gameBoardVector[i + 1][j + 1];  //SE
+
+	//need to push back into vector
+	gameBoardVector[i][j].adjacentTiles.push_back(temp1);
+	gameBoardVector[i][j].adjacentTiles.push_back(temp2);
+	gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+	gameBoardVector[i][j].adjacentTiles.push_back(temp4);
+	gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+	gameBoardVector[i][j].adjacentTiles.push_back(temp6);
+	gameBoardVector[i][j].adjacentTiles.push_back(temp7);
+	gameBoardVector[i][j].adjacentTiles.push_back(temp8);
+
+
+}
+
+void Board::LoadTest1() 
+{
+
+}
+
+void Board::LoadTest2() 
+{
+
+}
 

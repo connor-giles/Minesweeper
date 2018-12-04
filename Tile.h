@@ -20,10 +20,11 @@ struct Tile
 	sf::Sprite number1, number2, number3, number4;
 	sf::Sprite number5, number6, number7, number8;
 
-
 	bool isMine; //determines if the tile is a mine
 	bool isFlag; //determines if the tile is a flag
 	bool hasBeenLeftClicked; //determines if the tile has been clicked
+
+	vector<Tile *> adjacentTiles;
 
 	void TileIsMine(); //sets is mine to true
 
