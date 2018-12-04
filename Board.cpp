@@ -79,6 +79,7 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 
 	SetMines();
 	CalculateAdjacentTiles(); //should calculate the tiles 
+	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
 
 }
 
@@ -261,6 +262,38 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
 			{
 				dWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
+				if (gameBoardVector[i][j].numOfAdjMines == 1)
+				{
+					dWindow.draw(gameBoardVector[i][j].number1); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 2)
+				{
+					dWindow.draw(gameBoardVector[i][j].number2); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 3)
+				{
+					dWindow.draw(gameBoardVector[i][j].number3); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 4)
+				{
+					dWindow.draw(gameBoardVector[i][j].number4); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 5)
+				{
+					dWindow.draw(gameBoardVector[i][j].number5); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 6)
+				{
+					dWindow.draw(gameBoardVector[i][j].number6); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 7)
+				{
+					dWindow.draw(gameBoardVector[i][j].number7); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 8)
+				{
+					dWindow.draw(gameBoardVector[i][j].number8); //draws a revealed tile at that location
+				}
 			}
 
 			else
@@ -313,6 +346,38 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
 			{
 				rWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
+				if (gameBoardVector[i][j].numOfAdjMines == 1)
+				{
+					rWindow.draw(gameBoardVector[i][j].number1); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 2)
+				{
+					rWindow.draw(gameBoardVector[i][j].number2); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 3)
+				{
+					rWindow.draw(gameBoardVector[i][j].number3); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 4)
+				{
+					rWindow.draw(gameBoardVector[i][j].number4); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 5)
+				{
+					rWindow.draw(gameBoardVector[i][j].number5); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 6)
+				{
+					rWindow.draw(gameBoardVector[i][j].number6); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 7)
+				{
+					rWindow.draw(gameBoardVector[i][j].number7); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 8)
+				{
+					rWindow.draw(gameBoardVector[i][j].number8); //draws a revealed tile at that location
+				}
 			}
 
 			else
@@ -372,6 +437,8 @@ void Board::ResetBoard()
 
 	SetMines();
 	CalculateAdjacentTiles(); //should calculate the tiles surrounding
+	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
+
 
 }
 
@@ -385,6 +452,7 @@ void Board::CalculateAdjacentTiles()
 			if (!gameBoardVector[i][j].isMine && (i != 0) && (j != 0) && (i != width - 1) && (j != height - 1))
 			{
 				SetMiddleAdjTiles(i, j);
+				//gameBoardVector[i][j].numOfAdjMines = 8;
 			}
 
 			//UPPER LEFT CORNER
@@ -401,6 +469,8 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+
+				//gameBoardVector[i][j].numOfAdjMines = 3;
 			}
 
 			//UPPER RIGHT CORNER
@@ -417,6 +487,9 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+
+				//gameBoardVector[i][j].numOfAdjMines = 3;
+
 			}
 
 			//LOWER LEFT CORNER
@@ -433,6 +506,9 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+
+				//gameBoardVector[i][j].numOfAdjMines = 3;
+
 			}
 
 			//LOWER RIGHT CORNER
@@ -449,6 +525,9 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp1);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp2);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
+
+				//gameBoardVector[i][j].numOfAdjMines = 3;
+
 			}
 
 			//LEFT EDGE TILE
@@ -471,6 +550,9 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+
+				//gameBoardVector[i][j].numOfAdjMines = 5;
+
 			}
 
 			//TOP EDGE TILE
@@ -493,6 +575,9 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+
+				//gameBoardVector[i][j].numOfAdjMines = 5;
+
 			}
 
 			//RIGHT EDGE TILE
@@ -515,6 +600,9 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+
+				//gameBoardVector[i][j].numOfAdjMines = 5;
+
 			}
 
 			//BOTTOM EDGE TILE
@@ -537,12 +625,16 @@ void Board::CalculateAdjacentTiles()
 				gameBoardVector[i][j].adjacentTiles.push_back(temp3);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp4);
 				gameBoardVector[i][j].adjacentTiles.push_back(temp5);
+
+				//gameBoardVector[i][j].numOfAdjMines = 5;
+
 			}
 
 		}//end inner for loop
 	}//end outer for loop
 }//end function
 //STILL NEED THE STUFF FOR SET ADJACENT NUMBER OF MINES
+//CURRENTLY HAVE AN ISSUE WHERE ALL ADJACENT TILES WERE SAID TO BE MINES WHEN THEY WERE NOT
 void Board::SetMiddleAdjTiles(int i, int j) //this sets the adjacent tile if its in the middle 
 {
 	Tile* temp1;
@@ -637,6 +729,7 @@ void Board::LoadTest1()
 	iFile.close();
 
 	CalculateAdjacentTiles(); //should calculate the tiles surrounding
+	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
 
 	currentGameMode = Mode::Play;
 
@@ -703,10 +796,30 @@ void Board::LoadTest2()
 	iFile.close();
 
 	CalculateAdjacentTiles(); //should calculate the tiles surrounding
+	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
 
 	currentGameMode = Mode::Play;
 
 	//set adj tiles and bombs
 }
 
+void Board::CalculateAdjacentMines() 
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			int mineCount = 0;
+			for (int k = 0; k < gameBoardVector[i][j].adjacentTiles.size(); k++)
+			{
+				if (gameBoardVector[i][j].adjacentTiles.at(k)->isMine)
+				{
+					mineCount++;
+				}
+			}
+			
+			gameBoardVector[i][j].numOfAdjMines = mineCount;
 
+		}
+	}
+}

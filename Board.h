@@ -51,6 +51,7 @@ struct Board
 	void PlayRegularMode(sf::RenderWindow&);
 	void ResetBoard();
 	void CalculateAdjacentTiles();
+	void CalculateAdjacentMines();
 	void SetMiddleAdjTiles(int, int);
 	void LoadTest1();
 	void LoadTest2();
