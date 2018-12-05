@@ -235,22 +235,23 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 	{
 		for (int j = 0; j < height; j++)
 		{
-			if (gameBoardVector[i][j].isMine)
+
+			if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isMine) //checks if it was left clicked and a mine
+			{
+				currentGameMode = Mode::Lose;
+				gameIsPlayable = false;
+			}
+
+			else if (gameBoardVector[i][j].isMine)
 			{
 				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
 				dWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
 			}
-
+			
 			else if (gameBoardVector[i][j].isFlag)
 			{
 				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 				dWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
-			}
-
-			else if (gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isMine) //checks if it was left clicked and a mine
-			{
-				currentGameMode = Mode::Lose;
-				gameIsPlayable = false;
 			}
 
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
@@ -389,7 +390,7 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 				rWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
 			}
 
-			else if (gameBoardVector[i][j].isMine && !gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isFlag)
+			if (gameBoardVector[i][j].isMine && !gameBoardVector[i][j].hasBeenLeftClicked && gameBoardVector[i][j].isFlag)
 			{
 				rWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
 				rWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
