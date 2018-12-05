@@ -12,23 +12,20 @@ int Random(int min, int max)
 
 Board::Board() //populates the 2d vector used to make minesweeper board
 {
-	numMines = 50;
-	//numberFlagged = 0;
-	totalTiles = totalTiles - numMines;
-	currentGameMode = Mode::Play;
+	numMines = 0;
+	numberFlagged = 0;
+	totalTiles = height * width;
 	gameIsPlayable = true;
 	LoadTextures();
 
 	//all this code below sets the textures for the sprites that on at the bottom of the game board, as well as their location
-	place1.setTexture(imagesMap["digits0"]);
+	//place1.setTexture(imagesMap["digits0"]);
 	place1.setPosition(0.f, 16.f * tileWidth);
 
-	place2.setTexture(imagesMap["digits5"]);
-	//place2.setTextureRect(sf::IntRect(21.f * (numberFlagged % 10), 0, 21.f, width));
+	//place2.setTexture(imagesMap["digits5"]);
 	place2.setPosition(21.f, 16.f * tileWidth);
 
-	place3.setTexture(imagesMap["digits0"]);
-	//place3.setTextureRect(sf::IntRect(21.f * (numberFlagged / 10), 0, 21.f, width));
+	//place3.setTexture(imagesMap["digits0"]);
 	place3.setPosition(42.f, 16.f * tileWidth);
 
 	debugButton.setTexture(imagesMap["debug"]);
@@ -78,15 +75,16 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 
 		gameBoardVector.push_back(temptT);
 
-
 	}
 
 	SetMines();
+	totalTiles = totalTiles - numMines;
 	CalculateAdjacentTiles(); //should calculate the tiles 
 	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
-
+	UpdateMineCount();
+	
+	currentGameMode = Mode::Play;
 }
-
 
 Board::~Board()
 {
@@ -195,8 +193,8 @@ void Board::LoadTextures()
  
 void Board::SetMines() //this function loops through the total number of mines and randomly assigns a mine to a certain location
 {
-	
-	int tempMines = numMines;
+	int tempMines = 50;
+
 	while (tempMines != 0)
 	{
 		int x = Random(0, 24);
@@ -206,7 +204,10 @@ void Board::SetMines() //this function loops through the total number of mines a
 		{
 			gameBoardVector[x][y].TileIsMine();
 			tempMines--;
+			numMines++;
 		}
+
+		
 
 	}
 
@@ -249,7 +250,6 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 				dWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
 				dWindow.draw(gameBoardVector[i][j].mine); //draws a mine tile at that 
-				//numberFlagged++;
 			}
 
 			else if (gameBoardVector[i][j].isMine)
@@ -262,14 +262,22 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 			{
 				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
 				dWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that 
-				//numberFlagged++;
 			}
 
 
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
 			{
 				dWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
-				if (gameBoardVector[i][j].numOfAdjMines == 1)
+				
+				if (gameBoardVector[i][j].numOfAdjMines == 0) //this case should handle the cascade
+				{
+					for (int k = 0; k < gameBoardVector[i][j].adjacentTiles.size(); k++)
+					{
+						gameBoardVector[i][j].adjacentTiles[k]->hasBeenLeftClicked = true;
+					}
+				}
+			
+				else if (gameBoardVector[i][j].numOfAdjMines == 1)
 				{
 					dWindow.draw(gameBoardVector[i][j].number1); //draws a number1 tile at that location
 				}
@@ -427,12 +435,15 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 			{
 				rWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
 
-				/*
+			
 				if (gameBoardVector[i][j].numOfAdjMines == 0) //this case should handle the cascade
 				{
-					gameBoardVector[i][j].MultipleTileReveal();
+					for (int k = 0; k < gameBoardVector[i][j].adjacentTiles.size(); k++)
+					{
+						gameBoardVector[i][j].adjacentTiles[k]->hasBeenLeftClicked = true;
+					}
 				}
-				*/
+
 
 				if (gameBoardVector[i][j].numOfAdjMines == 1)
 				{
@@ -474,6 +485,7 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 	}
 
 	UpdateMineCount();
+ 
 
 	//these draw the bottom buttons
 	rWindow.draw(debugButton);
@@ -487,15 +499,17 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 
 void Board::ResetBoard() 
 {
-	//numberFlagged = 0;
-	numMines = 50;
-	gameIsPlayable = true;
-
+	
 	gameBoardVector.clear(); //completely removes old game
+
+	numberFlagged = 0;
+	numMines = 0;
+	gameIsPlayable = true;
+	totalTiles = height * width;
+
 	
 	for (int i = 0; i < width; i++)
 	{
-		currentGameMode = Mode::Play; //might not need to be here
 
 		vector<Tile> temptT;
 		for (int j = 0; j < height; j++)
@@ -527,6 +541,9 @@ void Board::ResetBoard()
 	SetMines();
 	CalculateAdjacentTiles(); //should calculate the tiles surrounding
 	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
+	totalTiles = totalTiles - numMines;
+
+	currentGameMode = Mode::Play; //might not need to be here
 
 
 }
@@ -760,6 +777,11 @@ void Board::SetMiddleAdjTiles(int i, int j) //this sets the adjacent tile if its
 void Board::LoadTest1() 
 {
 	//do the stuff for Test1
+
+	numberFlagged = 0;
+	numMines = 0;
+	gameIsPlayable = true;
+	totalTiles = height * width;
 	gameBoardVector.clear();
 
 	for (int i = 0; i < width; i++)
@@ -805,6 +827,7 @@ void Board::LoadTest1()
 				if (lineFromFile[i] == '1')
 				{
 					gameBoardVector[i][j].TileIsMine();
+					numMines++;
 				}
 				else
 				{
@@ -819,6 +842,7 @@ void Board::LoadTest1()
 
 	CalculateAdjacentTiles(); //should calculate the tiles surrounding
 	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
+	totalTiles = totalTiles - numMines;
 
 	currentGameMode = Mode::Play;
 
@@ -827,6 +851,10 @@ void Board::LoadTest1()
 void Board::LoadTest2()
 {
 	//do the stuff for Test2
+	numberFlagged = 0;
+	numMines = 0;
+	gameIsPlayable = true;
+	totalTiles = height * width;
 	gameBoardVector.clear();
 
 	for (int i = 0; i < width; i++)
@@ -872,6 +900,7 @@ void Board::LoadTest2()
 				if (lineFromFile[i] == '1')
 				{
 					gameBoardVector[i][j].TileIsMine();
+					numMines++;
 				}
 				else
 				{
@@ -886,6 +915,8 @@ void Board::LoadTest2()
 
 	CalculateAdjacentTiles(); //should calculate the tiles surrounding
 	CalculateAdjacentMines(); //should calculate the number of mines in the surrounding tiles
+	totalTiles = totalTiles - numMines;
+
 
 	currentGameMode = Mode::Play;
 
@@ -916,8 +947,8 @@ void Board::CalculateAdjacentMines()
 void Board::UpdateMineCount() 
 {
 	int numberOfFlagsOnBoard = 0;
-	int newNumMines = 50;
-	int iPlace1, iPlace2, iPlace3;
+	int newNumMines = numMines;
+	int iPlace1 = 0, iPlace2 = 0, iPlace3 = 0;
 	string sPlace1, sPlace2, sPlace3;
 	
 
@@ -933,12 +964,25 @@ void Board::UpdateMineCount()
 		}
 	}
 
-	newNumMines = newNumMines - numberOfFlagsOnBoard; 
-	iPlace3 = newNumMines % 10;
-	newNumMines /= 10;
-	iPlace2 = newNumMines % 10;
-	newNumMines /= 10;
-	iPlace1 = newNumMines % 10;
+	
+	newNumMines = newNumMines - numberOfFlagsOnBoard;
+
+	
+	if (newNumMines < 0)
+	{
+		iPlace3 = 0;
+		iPlace2 = 0;
+		iPlace1 = 0;
+	}
+	else 
+	{
+		iPlace3 = newNumMines % 10;
+		newNumMines /= 10;
+		iPlace2 = newNumMines % 10;
+		newNumMines /= 10;
+		iPlace1 = newNumMines % 10;
+	}
+	
 
 	sPlace1 = "digits" + to_string(iPlace1);
 	sPlace2 = "digits" + to_string(iPlace2);

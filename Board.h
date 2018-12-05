@@ -16,8 +16,8 @@ struct Board
 	const int height = 16;
 	const int width = 25;
 	int numMines;
-	int totalTiles = height * width;
-	//int numberFlagged;
+	int totalTiles;
+	int numberFlagged;
 	int tileWidth = 32; //this is the pixel width of one tile
 
 	bool gameIsPlayable;
