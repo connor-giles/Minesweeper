@@ -49,6 +49,7 @@ struct Board
 	void RevealMines(sf::RenderWindow&);
 	void PlayDebugMode(sf::RenderWindow&);
 	void PlayRegularMode(sf::RenderWindow&);
+	void PlayWinMode(sf::RenderWindow&);
 	void PlayLoseMode(sf::RenderWindow&);
 	void ResetBoard();
 	void CalculateAdjacentTiles();
@@ -57,6 +58,7 @@ struct Board
 	void LoadTest1();
 	void LoadTest2();
 	void UpdateMineCount();
+	bool GameWon();
 		
 };
 

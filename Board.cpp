@@ -93,7 +93,13 @@ Board::~Board()
 
 void Board::MakeBoard(sf::RenderWindow& mainWindow)
 {
-	if (currentGameMode == Mode::Debug) 
+	if (currentGameMode == Mode::Win) //might not need to be here
+	{
+		//do the stuff for Win
+		PlayWinMode(mainWindow);
+	}
+
+	else if (currentGameMode == Mode::Debug) 
 	{
 		PlayDebugMode(mainWindow);
 	}
@@ -108,10 +114,6 @@ void Board::MakeBoard(sf::RenderWindow& mainWindow)
 		LoadTest2();
 	}
 
-	else if (currentGameMode == Mode::Win) //might not need to be here
-	{
-		//do the stuff for Win
-	}
 
 	else if (currentGameMode == Mode::Lose) //might not need to be here
 	{
@@ -398,6 +400,79 @@ void Board::PlayLoseMode(sf::RenderWindow& lWindow)
 	lWindow.draw(place2);
 	lWindow.draw(place3);
 	lWindow.draw(loseButton);
+}
+
+void Board::PlayWinMode(sf::RenderWindow& wWindow)
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (gameBoardVector[i][j].isMine)
+			{
+				wWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
+				wWindow.draw(gameBoardVector[i][j].flagTile); //draws a revealed tile at that location
+			}
+			
+			else if (gameBoardVector[i][j].isFlag)
+			{
+				wWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+				wWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
+			}
+
+			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
+			{
+				wWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
+				if (gameBoardVector[i][j].numOfAdjMines == 1)
+				{
+					wWindow.draw(gameBoardVector[i][j].number1); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 2)
+				{
+					wWindow.draw(gameBoardVector[i][j].number2); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 3)
+				{
+					wWindow.draw(gameBoardVector[i][j].number3); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 4)
+				{
+					wWindow.draw(gameBoardVector[i][j].number4); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 5)
+				{
+					wWindow.draw(gameBoardVector[i][j].number5); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 6)
+				{
+					wWindow.draw(gameBoardVector[i][j].number6); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 7)
+				{
+					wWindow.draw(gameBoardVector[i][j].number7); //draws a revealed tile at that location
+				}
+				else if (gameBoardVector[i][j].numOfAdjMines == 8)
+				{
+					wWindow.draw(gameBoardVector[i][j].number8); //draws a revealed tile at that location
+				}
+			}
+			
+			else
+				wWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+			
+		}
+	}
+
+	UpdateMineCount();
+
+	//these draw the bottom buttons
+	wWindow.draw(debugButton);
+	wWindow.draw(test1);
+	wWindow.draw(test2);
+	wWindow.draw(place1);
+	wWindow.draw(place2);
+	wWindow.draw(place3);
+	wWindow.draw(winButton);
 }
 
 void Board::PlayRegularMode(sf::RenderWindow& rWindow)
@@ -964,7 +1039,8 @@ void Board::UpdateMineCount()
 		}
 	}
 
-	
+	numberFlagged = numberOfFlagsOnBoard;
+
 	newNumMines = newNumMines - numberOfFlagsOnBoard;
 
 	
@@ -992,4 +1068,29 @@ void Board::UpdateMineCount()
 	place2.setTexture(imagesMap[sPlace2]);
 	place3.setTexture(imagesMap[sPlace3]);
 
+}
+
+bool Board::GameWon() 
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (gameBoardVector[i][j].isFlag && !gameBoardVector[i][j].isMine)
+			{
+				return false;
+			}
+
+			if (!gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine)
+			{
+				return false;
+			}
+
+		}
+	}
+	
+	gameIsPlayable = false;
+	return true;
+
+	
 }
