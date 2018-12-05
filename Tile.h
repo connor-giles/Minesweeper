@@ -28,6 +28,7 @@ struct Tile
 	vector<Tile *> adjacentTiles;
 
 	void TileIsMine(); //sets is mine to true
+	void MultipleTileReveal(sf::RenderWindow&);
 
 	//regular constructor
 	Tile();

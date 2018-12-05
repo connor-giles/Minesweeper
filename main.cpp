@@ -52,45 +52,45 @@ int main()
 						boardObj.currentGameMode = Board::Mode::Debug; //keeps the game in debug mode
 					}
 
-					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the debug button area and not already in debug mode
+					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug && boardObj.gameIsPlayable) //checks if its within the debug button area and not already in debug mode
 					{
 						cout << "Debug mode turned on" << endl;
 						boardObj.currentGameMode = Board::Mode::Debug;
 					}
 
-					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug) 
+					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug && boardObj.gameIsPlayable) 
 					{
 						cout << "Debug mode turned off" << endl;
 						boardObj.currentGameMode = Board::Mode::Play;
 					}
 
-					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug)
+					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug && boardObj.gameIsPlayable)
 					{
 						cout << "Test 1 mode turned on in regular mode" << endl;
 						boardObj.currentGameMode = Board::Mode::Test1;
 					}
 
-					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug)
+					else if (Test1Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug && boardObj.gameIsPlayable)
 					{
 						cout << "Test 1 mode turned on in debug mode" << endl;
 						boardObj.currentGameMode = Board::Mode::Test1;
 						//maybe go back into debug mode?
 					}
 
-					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug)
+					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug && boardObj.gameIsPlayable)
 					{
 						cout << "Test 2 mode turned on in regular mode" << endl;
 						boardObj.currentGameMode = Board::Mode::Test2;
 					}
 
-					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug)
+					else if (Test2Clicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug && boardObj.gameIsPlayable)
 					{
 						cout << "Test 2 mode turned on in debug mode" << endl;
 						boardObj.currentGameMode = Board::Mode::Test2;
 						//maybe go back into debug mode?
 					}
 
-					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag) //implies the tile hasnt been left clicked yet
+					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //implies the tile hasnt been left clicked yet
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
 					}
@@ -109,18 +109,18 @@ int main()
 					//need to be able to right click a mine and have a flag appear
 
 
-					if (SelectedTile(event, boardObj).isFlag) //this checks if the tile is already a flag and removes the sprite
+					if (SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //this checks if the tile is already a flag and removes the sprite
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = false;
 					}
-					else if (!boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked) //assumes the tile is not a flag and hasnt already been left clicked
+					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && boardObj.gameIsPlayable) //assumes the tile is not a flag and hasnt already been left clicked
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = true;
 					} 
-
+					
 				}
 			}
-
+			 
 
 		}
 
@@ -186,3 +186,12 @@ Tile SelectedTile(sf::Event e, Board bObj)
 {
 	return bObj.gameBoardVector[e.mouseButton.x / 32][e.mouseButton.y / 32];
 }
+
+
+//TO DO
+//ADD WIN FUNCTIONALITY
+//NEED TO BE ABLE TO FLAG MINES
+//ADD LACK OF CLICKING UNLESS SMILE BUTTON IF WIN OR LOSE
+//CASCADE FUNCTION
+//ABILITY TO LOSE IN DEBUG MODE
+//ABILITY TO CLICK OUTSIDE OF BOX AND NOT TERMINATE
