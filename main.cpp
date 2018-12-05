@@ -28,6 +28,7 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 
+
 			if (event.type == sf::Event::MouseButtonPressed) //checks if the mouse button was pressed
 			{
 				if (event.mouseButton.button == sf::Mouse::Left) //only if its the left mouse click
@@ -38,22 +39,32 @@ int main()
 					cout << event.mouseButton.x << endl;
 					cout << event.mouseButton.y << endl;
 
+					
+
 					if (event.mouseButton.y < 512)
 					{
-
 						if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //implies the tile hasnt been left clicked yet
 						{
 							boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
-							//boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].MultipleTileReveal
 						}
 
-						else
+						if (boardObj.GameWon())
 						{
-
+							boardObj.currentGameMode == Board::Mode::Win;
 						}
+
 					}
 
-					if (ResetButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the reset face button area and not in debug mode
+					/*
+					if (boardObj.GameWon())
+					{
+						boardObj.currentGameMode == Board::Mode::Win;
+					}
+					*/
+					
+					
+
+					else if (ResetButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the reset face button area and not in debug mode
 					{
 						cout << "Reset button clicked in regular mode" << endl;
 						boardObj.ResetBoard();
@@ -104,6 +115,8 @@ int main()
 						//maybe go back into debug mode?
 					}
 
+					
+
 				}
 
 				if (event.mouseButton.button == sf::Mouse::Right) //only if its the right mouse 
@@ -119,7 +132,7 @@ int main()
 						{
 							boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = false;
 						}
-						else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && boardObj.gameIsPlayable) //assumes the tile is not a flag and hasnt already been left clicked
+						else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && boardObj.gameIsPlayable && (boardObj.numberFlagged < boardObj.numMines)) //assumes the tile is not a flag and hasnt already been left clicked
 						{
 							boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = true;
 						}

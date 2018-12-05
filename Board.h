@@ -19,6 +19,9 @@ struct Board
 	int totalTiles;
 	int numberFlagged;
 	int tileWidth = 32; //this is the pixel width of one tile
+	int tileClickedCounter = 0;
+
+	int numberRevealed = 0;
 
 	bool gameIsPlayable;
 
@@ -46,7 +49,6 @@ struct Board
 	void MakeBoard(sf::RenderWindow&);
 	void LoadTextures();
 	void SetMines();
-	void RevealMines(sf::RenderWindow&);
 	void PlayDebugMode(sf::RenderWindow&);
 	void PlayRegularMode(sf::RenderWindow&);
 	void PlayWinMode(sf::RenderWindow&);

@@ -16,16 +16,12 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	numberFlagged = 0;
 	totalTiles = height * width;
 	gameIsPlayable = true;
+	tileClickedCounter = 0;
 	LoadTextures();
 
 	//all this code below sets the textures for the sprites that on at the bottom of the game board, as well as their location
-	//place1.setTexture(imagesMap["digits0"]);
 	place1.setPosition(0.f, 16.f * tileWidth);
-
-	//place2.setTexture(imagesMap["digits5"]);
 	place2.setPosition(21.f, 16.f * tileWidth);
-
-	//place3.setTexture(imagesMap["digits0"]);
 	place3.setPosition(42.f, 16.f * tileWidth);
 
 	debugButton.setTexture(imagesMap["debug"]);
@@ -215,25 +211,6 @@ void Board::SetMines() //this function loops through the total number of mines a
 
 }
 
-void Board::RevealMines(sf::RenderWindow& mWindow)
-{
-	//needs to loop through whole board and reveal all the mines
-	for (int k = 0; k < width; k++)
-	{
-		for (int l = 0; l < height; l++)
-		{
-			if (gameBoardVector[k][l].isMine)
-			{
-				mWindow.draw(gameBoardVector[k][l].revealedTile);
-				mWindow.draw(gameBoardVector[k][l].mine);
-			}
-		}
-	}
-
-
-
-}
-
 void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 {
 	for (int i = 0; i < width; i++)
@@ -328,6 +305,11 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 	dWindow.draw(place2);
 	dWindow.draw(place3);
 	dWindow.draw(happyButton);
+
+	if (GameWon())
+	{
+		currentGameMode = Mode::Win;
+	}
 }
 
 void Board::PlayLoseMode(sf::RenderWindow& lWindow)
@@ -508,19 +490,20 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
 			{
+
 				rWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
 
-			
 				if (gameBoardVector[i][j].numOfAdjMines == 0) //this case should handle the cascade
 				{
 					for (int k = 0; k < gameBoardVector[i][j].adjacentTiles.size(); k++)
 					{
 						gameBoardVector[i][j].adjacentTiles[k]->hasBeenLeftClicked = true;
+						gameBoardVector[i][j].adjacentTiles[k]->hasBeenCounted = true;
 					}
+
 				}
 
-
-				if (gameBoardVector[i][j].numOfAdjMines == 1)
+				else if (gameBoardVector[i][j].numOfAdjMines == 1)
 				{
 					rWindow.draw(gameBoardVector[i][j].number1); //draws a revealed tile at that location
 				}
@@ -560,7 +543,7 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 	}
 
 	UpdateMineCount();
- 
+
 
 	//these draw the bottom buttons
 	rWindow.draw(debugButton);
@@ -570,6 +553,12 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 	rWindow.draw(place2);
 	rWindow.draw(place3);
 	rWindow.draw(happyButton);
+
+	if (GameWon())
+	{
+		currentGameMode = Mode::Win;
+	}
+	
 }
 
 void Board::ResetBoard() 
@@ -622,7 +611,6 @@ void Board::ResetBoard()
 
 
 }
-
 
 void Board::CalculateAdjacentTiles()
 {
@@ -814,8 +802,7 @@ void Board::CalculateAdjacentTiles()
 		}//end inner for loop
 	}//end outer for loop
 }//end function
-//STILL NEED THE STUFF FOR SET ADJACENT NUMBER OF MINES
-//CURRENTLY HAVE AN ISSUE WHERE ALL ADJACENT TILES WERE SAID TO BE MINES WHEN THEY WERE NOT
+
 void Board::SetMiddleAdjTiles(int i, int j) //this sets the adjacent tile if its in the middle 
 {
 	Tile* temp1;
@@ -1072,25 +1059,30 @@ void Board::UpdateMineCount()
 
 bool Board::GameWon() 
 {
+	int revealedCounter = 0;
 	for (int i = 0; i < width; i++)
 	{
 		for (int j = 0; j < height; j++)
 		{
-			if (gameBoardVector[i][j].isFlag && !gameBoardVector[i][j].isMine)
+			
+			if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine)
 			{
-				return false;
-			}
-
-			if (!gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine)
-			{
-				return false;
+				revealedCounter++;
 			}
 
 		}
 	}
 	
-	gameIsPlayable = false;
-	return true;
+	if (revealedCounter == totalTiles)
+	{
+		return true;
+	}
+
+	else
+	{
+		return false;
+	}
+	
 
 	
 }
