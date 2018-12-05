@@ -38,7 +38,7 @@ int main()
 					cout << event.mouseButton.x << endl;
 					cout << event.mouseButton.y << endl;
 
-					
+
 					if (ResetButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the reset face button area and not in debug mode
 					{
 						cout << "Reset button clicked in regular mode" << endl;
@@ -93,8 +93,10 @@ int main()
 					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //implies the tile hasnt been left clicked yet
 					{
 						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
+						//boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].MultipleTileReveal
 					}
-					else //assumes the tile has already been clicked
+
+					else 
 					{
 						
 					}
@@ -190,8 +192,6 @@ Tile SelectedTile(sf::Event e, Board bObj)
 
 //TO DO
 //ADD WIN FUNCTIONALITY
-//NEED TO BE ABLE TO FLAG MINES
 //ADD LACK OF CLICKING UNLESS SMILE BUTTON IF WIN OR LOSE
 //CASCADE FUNCTION
-//ABILITY TO LOSE IN DEBUG MODE
 //ABILITY TO CLICK OUTSIDE OF BOX AND NOT TERMINATE

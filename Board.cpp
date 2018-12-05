@@ -13,7 +13,7 @@ int Random(int min, int max)
 Board::Board() //populates the 2d vector used to make minesweeper board
 {
 	numMines = 50;
-	numberFlagged = 0;
+	//numberFlagged = 0;
 	totalTiles = totalTiles - numMines;
 	currentGameMode = Mode::Play;
 	gameIsPlayable = true;
@@ -24,9 +24,11 @@ Board::Board() //populates the 2d vector used to make minesweeper board
 	place1.setPosition(0.f, 16.f * tileWidth);
 
 	place2.setTexture(imagesMap["digits5"]);
+	//place2.setTextureRect(sf::IntRect(21.f * (numberFlagged % 10), 0, 21.f, width));
 	place2.setPosition(21.f, 16.f * tileWidth);
 
 	place3.setTexture(imagesMap["digits0"]);
+	//place3.setTextureRect(sf::IntRect(21.f * (numberFlagged / 10), 0, 21.f, width));
 	place3.setPosition(42.f, 16.f * tileWidth);
 
 	debugButton.setTexture(imagesMap["debug"]);
@@ -242,52 +244,62 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 				gameIsPlayable = false;
 			}
 
+			else if (gameBoardVector[i][j].isFlag && gameBoardVector[i][j].isMine)
+			{
+				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
+				dWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
+				dWindow.draw(gameBoardVector[i][j].mine); //draws a mine tile at that 
+				//numberFlagged++;
+			}
+
 			else if (gameBoardVector[i][j].isMine)
 			{
 				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a revealed tile at that location
-				dWindow.draw(gameBoardVector[i][j].mine); //draws a revealed tile at that location
+				dWindow.draw(gameBoardVector[i][j].mine); //draws a mine tile at that location
 			}
 			
 			else if (gameBoardVector[i][j].isFlag)
 			{
 				dWindow.draw(gameBoardVector[i][j].hiddenTile); //draws a hidden tile at that location
-				dWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that location
+				dWindow.draw(gameBoardVector[i][j].flagTile); //draws a flag tile at that 
+				//numberFlagged++;
 			}
+
 
 			else if (gameBoardVector[i][j].hasBeenLeftClicked && !gameBoardVector[i][j].isMine) //checks if it was left clicked and not a mine
 			{
 				dWindow.draw(gameBoardVector[i][j].revealedTile); //draws a revealed tile at that location
 				if (gameBoardVector[i][j].numOfAdjMines == 1)
 				{
-					dWindow.draw(gameBoardVector[i][j].number1); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number1); //draws a number1 tile at that location
 				}
 				else if (gameBoardVector[i][j].numOfAdjMines == 2)
 				{
-					dWindow.draw(gameBoardVector[i][j].number2); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number2); //draws a number2 tile at that location
 				}
 				else if (gameBoardVector[i][j].numOfAdjMines == 3)
 				{
-					dWindow.draw(gameBoardVector[i][j].number3); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number3); //draws a number3 tile at that location
 				}
 				else if (gameBoardVector[i][j].numOfAdjMines == 4)
 				{
-					dWindow.draw(gameBoardVector[i][j].number4); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number4); //draws a number4 tile at that location
 				}
 				else if (gameBoardVector[i][j].numOfAdjMines == 5)
 				{
-					dWindow.draw(gameBoardVector[i][j].number5); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number5); //draws a number5 tile at that location
 				}
 				else if (gameBoardVector[i][j].numOfAdjMines == 6)
 				{
-					dWindow.draw(gameBoardVector[i][j].number6); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number6); //draws a number6 tile at that location
 				}
 				else if (gameBoardVector[i][j].numOfAdjMines == 7)
 				{
-					dWindow.draw(gameBoardVector[i][j].number7); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number7); //draws a number7 tile at that location
 				}
 				else if (gameBoardVector[i][j].numOfAdjMines == 8)
 				{
-					dWindow.draw(gameBoardVector[i][j].number8); //draws a revealed tile at that location
+					dWindow.draw(gameBoardVector[i][j].number8); //draws a number8 tile at that location
 				}
 			}
 
@@ -296,6 +308,7 @@ void Board::PlayDebugMode(sf::RenderWindow& dWindow)
 		}
 	}
 
+	UpdateMineCount();
 
 	//these draw the bottom buttons
 	dWindow.draw(debugButton);
@@ -367,6 +380,7 @@ void Board::PlayLoseMode(sf::RenderWindow& lWindow)
 		}
 	}
 
+	UpdateMineCount();
 
 	//these draw the bottom buttons
 	lWindow.draw(debugButton);
@@ -416,7 +430,7 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 				/*
 				if (gameBoardVector[i][j].numOfAdjMines == 0) //this case should handle the cascade
 				{
-					gameBoardVector[i][j].MultipleTileReveal(rWindow);
+					gameBoardVector[i][j].MultipleTileReveal();
 				}
 				*/
 
@@ -459,6 +473,7 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 		}
 	}
 
+	UpdateMineCount();
 
 	//these draw the bottom buttons
 	rWindow.draw(debugButton);
@@ -472,7 +487,7 @@ void Board::PlayRegularMode(sf::RenderWindow& rWindow)
 
 void Board::ResetBoard() 
 {
-	numberFlagged = 0;
+	//numberFlagged = 0;
 	numMines = 50;
 	gameIsPlayable = true;
 
@@ -898,3 +913,39 @@ void Board::CalculateAdjacentMines()
 	}
 }
 
+void Board::UpdateMineCount() 
+{
+	int numberOfFlagsOnBoard = 0;
+	int newNumMines = 50;
+	int iPlace1, iPlace2, iPlace3;
+	string sPlace1, sPlace2, sPlace3;
+	
+
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (gameBoardVector[i][j].isFlag) 
+			{
+				numberOfFlagsOnBoard++;
+			}
+
+		}
+	}
+
+	newNumMines = newNumMines - numberOfFlagsOnBoard; 
+	iPlace3 = newNumMines % 10;
+	newNumMines /= 10;
+	iPlace2 = newNumMines % 10;
+	newNumMines /= 10;
+	iPlace1 = newNumMines % 10;
+
+	sPlace1 = "digits" + to_string(iPlace1);
+	sPlace2 = "digits" + to_string(iPlace2);
+	sPlace3 = "digits" + to_string(iPlace3);
+
+	place1.setTexture(imagesMap[sPlace1]);
+	place2.setTexture(imagesMap[sPlace2]);
+	place3.setTexture(imagesMap[sPlace3]);
+
+}

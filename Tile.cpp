@@ -48,50 +48,18 @@ void Tile::TileIsMine()
 	isMine = true;
 }
 
-void Tile::MultipleTileReveal(sf::RenderWindow& revealWindow)
+void Tile::MultipleTileReveal()
 {
-	for (int i = 0; i < adjacentTiles.size(); i++)
-	{
-		if (adjacentTiles[i]->numOfAdjMines == 0)
-		{
-			adjacentTiles[i]->MultipleTileReveal(revealWindow);
-		}
 
-		
-		if (adjacentTiles[i]->numOfAdjMines > 0)
+	for (auto &adjTile : adjacentTiles)
+	{
+		if (adjTile->numOfAdjMines == 0)
 		{
-			if (adjacentTiles[i]->numOfAdjMines == 1)
-			{
-				revealWindow.draw(adjacentTiles[i]->number1); //draws a revealed tile at that location
-			}
-			else if (adjacentTiles[i]->numOfAdjMines == 2)
-			{
-				revealWindow.draw(adjacentTiles[i]->number2);
-			}
-			else if (adjacentTiles[i]->numOfAdjMines == 3)
-			{
-				revealWindow.draw(adjacentTiles[i]->number3);
-			}
-			else if (adjacentTiles[i]->numOfAdjMines == 4)
-			{
-				revealWindow.draw(adjacentTiles[i]->number4);
-			}
-			else if (adjacentTiles[i]->numOfAdjMines == 5)
-			{
-				revealWindow.draw(adjacentTiles[i]->number5);
-			}
-			else if (adjacentTiles[i]->numOfAdjMines == 6)
-			{
-				revealWindow.draw(adjacentTiles[i]->number6);
-			}
-			else if (adjacentTiles[i]->numOfAdjMines == 7)
-			{
-				revealWindow.draw(adjacentTiles[i]->number7);
-			}
-			else if (adjacentTiles[i]->numOfAdjMines == 8)
-			{
-				revealWindow.draw(adjacentTiles[i]->number8);
-			}
+			adjTile->MultipleTileReveal();
+		}
+		if (adjTile->numOfAdjMines > 0 && !adjTile->isFlag) //has an adjacent  mine and is flagged
+		{
+			adjTile->hasBeenLeftClicked = true;
 		}
 		
 	}

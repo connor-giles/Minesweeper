@@ -17,7 +17,7 @@ struct Board
 	const int width = 25;
 	int numMines;
 	int totalTiles = height * width;
-	int numberFlagged;
+	//int numberFlagged;
 	int tileWidth = 32; //this is the pixel width of one tile
 
 	bool gameIsPlayable;
@@ -56,6 +56,7 @@ struct Board
 	void SetMiddleAdjTiles(int, int);
 	void LoadTest1();
 	void LoadTest2();
+	void UpdateMineCount();
 		
 };
 
