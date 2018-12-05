@@ -831,7 +831,7 @@ void Board::LoadTest1()
 				}
 				else
 				{
-					gameBoardVector[i][j].isMine == false;
+					gameBoardVector[i][j].isMine = false;
 				}
 			}
 			j++;

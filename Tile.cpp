@@ -48,19 +48,3 @@ void Tile::TileIsMine()
 	isMine = true;
 }
 
-void Tile::MultipleTileReveal()
-{
-
-	for (auto &adjTile : adjacentTiles)
-	{
-		if (adjTile->numOfAdjMines == 0)
-		{
-			adjTile->MultipleTileReveal();
-		}
-		if (adjTile->numOfAdjMines > 0 && !adjTile->isFlag) //has an adjacent  mine and is flagged
-		{
-			adjTile->hasBeenLeftClicked = true;
-		}
-		
-	}
-}

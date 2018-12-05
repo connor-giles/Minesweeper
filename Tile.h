@@ -28,9 +28,7 @@ struct Tile
 	vector<Tile *> adjacentTiles;
 
 	void TileIsMine(); //sets is mine to true
-	void MultipleTileReveal();
 
-	//regular constructor
 	Tile();
 
 	//constructor that takes in all the textures as parameters

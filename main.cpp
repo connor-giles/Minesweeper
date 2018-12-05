@@ -38,6 +38,20 @@ int main()
 					cout << event.mouseButton.x << endl;
 					cout << event.mouseButton.y << endl;
 
+					if (event.mouseButton.y < 512)
+					{
+
+						if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //implies the tile hasnt been left clicked yet
+						{
+							boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
+							//boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].MultipleTileReveal
+						}
+
+						else
+						{
+
+						}
+					}
 
 					if (ResetButtonClicked(event, boardObj) && boardObj.currentGameMode != Board::Mode::Debug) //checks if its within the reset face button area and not in debug mode
 					{
@@ -58,7 +72,7 @@ int main()
 						boardObj.currentGameMode = Board::Mode::Debug;
 					}
 
-					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug && boardObj.gameIsPlayable) 
+					else if (DebugButtonClicked(event, boardObj) && boardObj.currentGameMode == Board::Mode::Debug && boardObj.gameIsPlayable)
 					{
 						cout << "Debug mode turned off" << endl;
 						boardObj.currentGameMode = Board::Mode::Play;
@@ -90,17 +104,6 @@ int main()
 						//maybe go back into debug mode?
 					}
 
-					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && !SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //implies the tile hasnt been left clicked yet
-					{
-						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].hasBeenLeftClicked = true;
-						//boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].MultipleTileReveal
-					}
-
-					else 
-					{
-						
-					}
-
 				}
 
 				if (event.mouseButton.button == sf::Mouse::Right) //only if its the right mouse 
@@ -110,21 +113,24 @@ int main()
 					//need to add a fix for clicking outside of the board with a right click
 					//need to be able to right click a mine and have a flag appear
 
+					if (event.mouseButton.y < 512) 
+					{
+						if (SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //this checks if the tile is already a flag and removes the sprite
+						{
+							boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = false;
+						}
+						else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && boardObj.gameIsPlayable) //assumes the tile is not a flag and hasnt already been left clicked
+						{
+							boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = true;
+						}
 
-					if (SelectedTile(event, boardObj).isFlag && boardObj.gameIsPlayable) //this checks if the tile is already a flag and removes the sprite
-					{
-						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = false;
 					}
-					else if (!SelectedTile(event, boardObj).hasBeenLeftClicked && boardObj.gameIsPlayable) //assumes the tile is not a flag and hasnt already been left clicked
-					{
-						boardObj.gameBoardVector[event.mouseButton.x / 32][event.mouseButton.y / 32].isFlag = true;
-					} 
 					
-				}
-			}
+				} //end right click functionality
+			} //end all mouse press functionality
 			 
 
-		}
+		} //end event polling
 
 		window.clear();
 
@@ -193,5 +199,4 @@ Tile SelectedTile(sf::Event e, Board bObj)
 //TO DO
 //ADD WIN FUNCTIONALITY
 //ADD LACK OF CLICKING UNLESS SMILE BUTTON IF WIN OR LOSE
-//CASCADE FUNCTION
-//ABILITY TO CLICK OUTSIDE OF BOX AND NOT TERMINATE
+
